@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>fields model</title>
+<script src="js/jquery-2.1.4.min.js"></script>
+<script src="js/app.js"></script>
+<style>
+#panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    border:1px solid #008;
+    padding: 10px;
+}
+
+.radio-group { margin-bottom: 10px; }
+
+
+#field {
+    background:#eee;
+    margin: 50px auto 0 auto;
+    width:800px;
+    height:800px;
+    border-top: 1px solid black;
+    border-left:1px solid black;
+}
+
+#field div {
+    float:  left;
+    width:  15px;
+    height: 15px;
+    border-bottom: 1px solid #008;
+    border-right:  1px solid #008;
+}
+
+#field div.c1 { 
+    background: #888; 
+}
+
+.inkA { color: #e00; }
+.inkB { color: #0e0; }
+.inkC { color: #00e; }
+
+div.coreA {background: #e00;}
+div.coreB {background: #0e0;}
+div.coreC {background: #00e;}
+
+div.areaA {background: #fbb;}
+div.areaB {background: #bfb;}
+div.areaC {background: #bbf;}
+
+
+</style>
+</head>
+<body>
+<div id="panel">
+    <div class="radio-group">
+        <input type="radio" name="ink" id="ink_A" value="A" checked/><label for="ink_A" class="inkA"/>Alpha</label><br>
+        <input type="radio" name="ink" id="ink_B" value="B"/><label for="ink_B" class="inkB"/>Beta</label><br>
+        <input type="radio" name="ink" id="ink_C" value="C"/><label for="ink_C" class="inkC"/>Gamma</label>
+    </div>
+    <button id="clear-btn">Clear</button>
+</div>
+<div id="field"></div>
+<script>
+//==============================================================================
+$(document).ready(function() {
+const app = new cApp()
+// app.fillTpl()
+})
+//==============================================================================
+</script>
+</body>
+</html>
