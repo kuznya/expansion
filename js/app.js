@@ -46,11 +46,9 @@ cApp.prototype.getCoord = function(id)     { return id.split('_') }
 //----------------------------------------------------------
 cApp.prototype.getId    = function(y,x)    { return y+'_'+x }
 
-cApp.prototype.getDistance = function(id1, id2){
-    let res = this.getCoord(id1)
-    const y1 = res[0], x1 = res[1]
-    res = this.getCoord(id2)
-    const y2 = res[0], x2 = res[1]
+cApp.prototype.getDistanceSqr = function(id1, id2){
+    const [y1, x1] = this.getCoord(id1)
+    const [y2, x2] = this.getCoord(id2)
     return (y2-y1)*(y2-y1) + (x2-x1)*(x2-x1)
 }
 
@@ -91,45 +89,48 @@ cApp.prototype.getCores = function () {
     const res = this.area.find('.coreA, .coreB, .coreC')
     //dbg(res.length)
     cores = {}
+    groups = {'A': [], 'B': [], 'C':[]}
     for (let i=0; i<res.length; i++) {
         v = res.eq(i)
         const id = v.attr('id')
-        const cl = v.attr('class')
+        const cls = v.attr('class')
         //dbg(id+' : '+cl)
-        cores[id] = cl.substring(4)
+        const cl= cls.substring(4)
+        cores[id] = cl
+        groups[cl].push(id)
     }
-    //dbg(cores)
-    return cores
+    // dbg(cores)
+    // dbg(groups)
+    return [cores, groups]
 }
 
 cApp.prototype.resetField = function() {
-    dbg(':resetField()')
+    // dbg(':resetField()')
     this.area.find('div').removeClass()
 }
 
-cApp.prototype.classify = function (cores, id) {
+cApp.prototype.classify = function (cores, groups, id) {
     if (id in cores) return 'core'+cores[id]
-    let distance = 10000
-    let cl = null
-    let is_dual = false
-    for (k in cores) {
-        const d1 = this.getDistance(k, id)
-        //dbg(d1)
-        if (d1 == distance && cl != cores[k]) {
-            // is_dual
+    max_field = 0
+    cl = null
+    for (k in groups) {
+        let sum = 0
+        for (let i=0; i<groups[k].length; i++) {
+            const core = groups[k][i]
+            sum += 1/this.getDistanceSqr(core, id)
+        }
+        if (sum > max_field) {
+            [max_field, cl] = [sum, k]
+        } else if ( sum == max_field) {
             cl = null
         }
-        if (d1 < distance) {
-            distance = d1
-            cl = cores[k]
-        }
     }
-    //dbg(id + '-> ' + cl)
-    return 'area'+cl
+    if (cl) return 'area'+cl
+    return null
 }
 
 cApp.prototype.renderAreas = function() {
-    const cores = this.getCores()
+    const [cores, groups] = this.getCores()
     // dbg(cores.length)
     // if (cores.length < 1) {
     //     this.resetField()
@@ -140,7 +141,7 @@ cApp.prototype.renderAreas = function() {
         for (let j=0; j<cfg.SizeX; j++)
         {
             const id = this.getId(i, j)
-            cl = this.classify(cores, id)
+            cl = this.classify(cores, groups, id)
             const o = this.area.find('#'+id)
             o.removeClass()
             if (cl) o.addClass(cl)
