@@ -9,7 +9,7 @@ function cApp()
 }
 
 cApp.prototype.setInk = function (c) {
-    dbg('setInk: '+c)
+    // dbg('setInk: '+c)
     this.ink = c
     // const id = 'ink' + c
     // dbg('id:'+id)
@@ -46,15 +46,14 @@ cApp.prototype.getCoord = function(id)     { return id.split('_') }
 //----------------------------------------------------------
 cApp.prototype.getId    = function(y,x)    { return y+'_'+x }
 
-cApp.prototype.getDistanceSqr = function(id1, id2){
+cApp.prototype.getDistanceSqr = function(id1, id2) {
     const [y1, x1] = this.getCoord(id1)
     const [y2, x2] = this.getCoord(id2)
     return (y2-y1)*(y2-y1) + (x2-x1)*(x2-x1)
 }
 
 //----------------------------------------------------------
-cApp.prototype.drawField = function()
-{
+cApp.prototype.drawField = function() {
     var cfg = this.cfg
     var area = this.area
     var ss = ''
@@ -70,8 +69,7 @@ cApp.prototype.drawField = function()
 }
 
 //----------------------------------------------------------
-cApp.prototype.clickCellProc = function(ctx)
-{
+cApp.prototype.clickCellProc = function(ctx) {
     var self = $(ctx)
     var id = self.attr('id')
     cl = 'core'+this.ink
@@ -131,11 +129,10 @@ cApp.prototype.classify = function (cores, groups, id) {
 
 cApp.prototype.renderAreas = function() {
     const [cores, groups] = this.getCores()
-    // dbg(cores.length)
-    // if (cores.length < 1) {
-    //     this.resetField()
-    //     return
-    // }
+    if (!Object.keys(cores).length) {
+        this.resetField()
+        return
+    }
     const cfg = this.cfg
     for (let i=0; i<cfg.SizeY; i++)
         for (let j=0; j<cfg.SizeX; j++)
@@ -145,19 +142,5 @@ cApp.prototype.renderAreas = function() {
             const o = this.area.find('#'+id)
             o.removeClass()
             if (cl) o.addClass(cl)
-        }
-}
-
-//----------------------------------------------------------
-cApp.prototype.fillTpl = function()
-{
-    var cfg = this.cfg
-    var area = this.area
-    area.find('div').removeClass()
-    for (var i=0; i<cfg.SizeY; i++)
-        for (var j=0; j<cfg.SizeX; j++)
-        {
-            id = this.getId(i,j)
-            if ( !(i&1) && !(j&1) ) area.find('#'+id).addClass('c1')
         }
 }
