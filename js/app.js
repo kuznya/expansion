@@ -19,7 +19,7 @@ cApp.prototype.setInk = function (c) {
 cApp.prototype.init = function()
 {
     const self = this
-    this.cfg = {SizeX: 50, SizeY: 50}
+    this.cfg = {SizeX: 100, SizeY: 100}
     var area = $('#field')
     this.area = area
     this.drawField()
@@ -34,9 +34,12 @@ cApp.prototype.init = function()
     $('#clear-btn').click(()=>{
         self.resetField()
     })
-    $('#15_23').addClass('coreA')
-    $('#26_32').addClass('coreB')
-    $('#27_14').addClass('coreC')
+    // $('#15_23').addClass('coreA')
+    // $('#26_32').addClass('coreB')
+    // $('#27_14').addClass('coreC')
+    $('#30_46').addClass('coreA')
+    $('#52_64').addClass('coreB')
+    $('#53_28').addClass('coreC')
     this.renderAreas()
 }
 
